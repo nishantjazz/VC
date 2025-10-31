@@ -1,0 +1,22 @@
+# Node.js
+**/node_modules
+**/npm-debug.log
+**/pnpm-lock.yaml
+**/yarn.lock
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Build output
+**/dist
+**/build
+
+# Logs
+*.log
+logs
+
+# OS files
+.DS_Store
+Thumbs.db
