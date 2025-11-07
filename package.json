@@ -1,0 +1,14 @@
+{
+  "name": "video-calling-app",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "docker:dev": "docker compose -p vc_dev -f docker-compose.dev.yml up --watch",
+    "docker:dev:down": "docker compose -p vc_dev -f docker-compose.dev.yml down",
+    "docker:prod": "docker compose -p vc_prod -f docker-compose.prod.yml up -d",
+    "docker:prod:down": "docker compose -p vc_prod -f docker-compose.prod.yml down",
+    "docker:ps": "docker compose ps",
+    "docker:logs:dev": "docker compose -p vc_dev -f docker-compose.dev.yml logs -f",
+    "docker:logs:prod": "docker compose -p vc_prod -f docker-compose.prod.yml logs -f"
+  }
+}

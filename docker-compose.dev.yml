@@ -1,0 +1,39 @@
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+      target: dev
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./server/src:/app/src
+    environment:
+      - NODE_ENV=development
+    develop:
+      watch:
+        - path: ./server/src
+          target: /app/src
+          action: sync
+        - path: ./server/package.json
+          action: rebuild
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      target: dev
+    ports:
+      - "3000:3000"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - REACT_APP_SERVER_URL=http://localhost:4000
+    develop:
+      watch:
+        - path: ./client/src
+          target: /app/src
+          action: sync
+        - path: ./client/package.json
+          action: rebuild
+    depends_on:
+      - server

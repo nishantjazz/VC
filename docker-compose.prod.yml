@@ -1,0 +1,22 @@
+services:
+  server:
+    build:
+      context: ./server
+      target: prod
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=production
+    command: node src/index.js
+
+  client:
+    build:
+      context: ./client
+      target: prod-server
+    ports:
+      - "3000:80"
+    environment:
+      - NODE_ENV=production
+      - REACT_APP_SERVER_URL=http://server:4000
+    depends_on:
+      - server

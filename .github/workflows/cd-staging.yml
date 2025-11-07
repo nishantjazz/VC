@@ -1,0 +1,39 @@
+name: CD Staging
+
+on:
+  workflow_run:
+    workflows: ["CI - MERN VC App"]
+    types:
+      - completed
+
+jobs:
+  deploy-staging:
+    name: Deploy Dev Images to Staging
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Pull Dev Images (if pushed to registry)
+        run: |
+          docker pull vc-server:dev || echo "No image found, using local build"
+
+      - name: Trigger Render Staging Deploy
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          SERVER_SERVICE_ID: ${{ secrets.RENDER_SERVER_SERVICE_ID }}
+        run: |
+          curl -X POST https://api.render.com/v1/services/$SERVER_SERVICE_ID/deploys \
+            -H "Accept: application/json" \
+            -H "Authorization: Bearer $RENDER_API_KEY" \
+            -d '{}'
