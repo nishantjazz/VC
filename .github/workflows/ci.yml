@@ -2,9 +2,9 @@ name: CI - MERN VC App
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, test ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, test ]
 
 permissions:
   contents: read
@@ -34,7 +34,7 @@ jobs:
   build-and-push-images:
     needs: backend-tests
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/test'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -54,5 +54,5 @@ jobs:
 
       - name: Build and push backend prod image
         run: |
-          docker build --target prod -t ghcr.io/${{ github.actor }}/VC-server:${{ github.sha }} -f server/Dockerfile server
-          docker push ghcr.io/${{ github.actor }}/VC-server:${{ github.sha }}
+          docker build --target prod -t ghcr.io/${{ github.actor }}/vc-server:${{ github.sha }} -f server/Dockerfile server
+          docker push ghcr.io/${{ github.actor }}/vc-server:${{ github.sha }}
