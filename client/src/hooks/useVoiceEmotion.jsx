@@ -69,7 +69,7 @@ export const useVoiceEmotion = (audioStream) => {
           // if too long (shouldn't happen), cut
           if (flat.length > 2376) flat = flat.slice(0, 2376);
 
-          const res = await fetch("http://localhost:4000/api/emotion/predict", {
+          const res = await fetch(`${process.env.REACT_APP_SERVER_URL || "http://localhost:4000"}/api/emotion/predict`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ features: flat }),
