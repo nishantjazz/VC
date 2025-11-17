@@ -4,6 +4,14 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const logger = require('./utils/logger');
 const authRoutes = require('./routes/User');
+const ort = require('onnxruntime-node');
+const path = require('path');
+const emotionRoutes = require("./routes/Emotion");
+
+const { loadModel } = require("./model/emotionModel");
+
+loadModel().catch(err => console.error("Model load failed:", err));
+
 
 const app = express();
 app.use(express.json());
@@ -44,6 +52,8 @@ app.get('/api', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+
+app.use('/api/emotion', emotionRoutes);
 
 // Catch-all 404 handler (no `err` param!)
 app.use((req, res) => {
