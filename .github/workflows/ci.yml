@@ -55,4 +55,4 @@ jobs:
           file: ./server/Dockerfile
           target: prod
           push: true
-          tags: ghcr.io/${{ github.actor }}/vc-server:prod:${{ github.sha }}
+          tags: ghcr.io/${{ github.actor }}/vc-server:prod-${{ github.sha }}

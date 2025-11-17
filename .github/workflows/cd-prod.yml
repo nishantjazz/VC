@@ -20,7 +20,7 @@ jobs:
           password: ${{ secrets.GHCR_PAT }}
           
       - name: Pull Prod Image
-        run: docker pull ghcr.io/${{ github.actor }}/vc-server:prod:${{ github.sha }}
+        run: docker pull ghcr.io/${{ github.actor }}/vc-server:prod-${{ github.sha }}
 
       - name: Trigger Render Production Deploy
         env:
