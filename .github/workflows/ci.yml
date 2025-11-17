@@ -2,9 +2,9 @@ name: CI - MERN VC App
 
 on:
   push:
-    branches: [ main, test ]
+    branches: [ main ]
   pull_request:
-    branches: [ main, test ]
+    branches: [ main ]
 
 permissions:
   contents: read
@@ -31,16 +31,12 @@ jobs:
       - name: Run backend tests
         run: npm test
 
-  build-and-push-images:
+  build-and-push-prod:
     needs: backend-tests
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/test'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -52,7 +48,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GHCR_PAT }}  # Personal Access Token
 
-      - name: Build and push backend prod image
-        run: |
-          docker build --target prod -t ghcr.io/${{ github.actor }}/vc-server:${{ github.sha }} -f server/Dockerfile server
-          docker push ghcr.io/${{ github.actor }}/vc-server:${{ github.sha }}
+      - name: Build and push prod image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./server
+          file: ./server/Dockerfile
+          target: prod
+          push: true
+          tags: ghcr.io/${{ github.actor }}/vc-server:prod:${{ github.sha }}

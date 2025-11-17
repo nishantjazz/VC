@@ -12,24 +12,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Login to DockerHub
+      - name: Log in to GHCR
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build backend prod image
-        run: |
-          docker build --target prod -t vc-server:prod ./server
-
-      - name: Push backend prod image
-        run: docker push vc-server:prod || echo "Skipping push if not using registry"
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_PAT }}
+          
+      - name: Pull Prod Image
+        run: docker pull ghcr.io/${{ github.actor }}/vc-server:prod:${{ github.sha }}
 
       - name: Trigger Render Production Deploy
         env:

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
 import SimplePeer from 'simple-peer';
+import VoiceEmotionBadge from "../components/VoiceEmotionBadge";
 import '../App.css';
 
 // Use environment variable for server URL
@@ -17,7 +18,14 @@ const Home = () => {
   const [incominCallInfo, setIncominCallInfo] = useState({});
 
   useEffect(() => {
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+    navigator.mediaDevices.getUserMedia({ 
+      video: true,
+      audio: {
+        echoCancellation: true,
+        noiseSuppression: true,
+        autoGainControl: false
+      }
+     })
       .then((mediaStream) => {
         setStream(mediaStream);
         if (myVideoRef.current) {
@@ -173,6 +181,9 @@ const Home = () => {
           <button onClick={answerCall} className="input text-white bg-green-600 hover:bg-green-700 active:bg-green-900">Answer call</button>
         </div>
       }
+
+      <VoiceEmotionBadge audioStream={stream}/>
+
     </div>
   );
 }

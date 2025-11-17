@@ -1,0 +1,50 @@
+# === DATA FILES ===
+*.csv
+*.wav
+*.mp3
+*.flac
+*.ogg
+*.m4a
+*.zip
+
+# Ignore entire datasets folder if exists
+data/
+dataset/
+datasets/
+audio/
+samples/
+
+# === MODEL FILES ===
+*.pth
+*.onnx
+*.pt
+*.pkl
+*.joblib
+
+# Training outputs
+models/
+checkpoints/
+outputs/
+
+# === PYTHON ENVIRONMENTS ===
+venv/
+.env/
+.env*/ 
+*.env
+
+# === JUPYTER NOTEBOOKS CHECKPOINTS ===
+.ipynb_checkpoints/
+
+# === PYTHON CACHE ===
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# === LOGS ===
+logs/
+*.log
+
+# === MISC ===
+.DS_Store
+*.tmp

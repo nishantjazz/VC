@@ -2,9 +2,13 @@ name: CI Dev Images
 
 on:
   push:
-    branches: [ main, test ]
+    branches: [ test ]
   pull_request:
-    branches: [ main, test ]
+    branches: [ test ]
+
+permissions:
+  contents: read
+  packages: write
 
 jobs:
   test-backend:
@@ -31,7 +35,7 @@ jobs:
         run: npm test
 
   build-dev-images:
-    name: Build Dev Docker Images
+    name: Build & Push Dev Docker Image
     runs-on: ubuntu-latest
     needs: test-backend
     steps:
@@ -41,12 +45,17 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # Build server dev image
-      - name: Build server dev image
+      - name: Login to Docker
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build & Push Dev Image
         uses: docker/build-push-action@v5
         with:
           context: ./server
           file: ./server/Dockerfile
           target: dev
-          tags: vc-server:dev
-          push: false
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/vc-server:dev
