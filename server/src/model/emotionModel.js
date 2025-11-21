@@ -1,4 +1,3 @@
-// server/src/model/emotionModel.js
 const ort = require("onnxruntime-node");
 const path = require("path");
 
@@ -27,6 +26,5 @@ async function loadModel() {
 
 module.exports = {
   loadModel,
-  /** true exported reference */
   getSession: () => session
 };

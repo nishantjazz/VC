@@ -15,18 +15,18 @@ export const useVoiceEmotion = (audioStream) => {
   useEffect(() => {
     // stop when stream changes
     return () => stopListening();
-    // eslint-disable-next-line
+    
   }, [audioStream]);
 
   const startListening = async () => {
     if (isListening) return;
     if (!audioStream) {
-      console.error("❌ No audio stream provided to emotion hook.");
+      console.error("No audio stream provided to emotion hook.");
       return;
     }
 
     try {
-      console.log("🎧 Starting emotion detection using existing WebRTC stream...");
+      console.log("Starting emotion detection using existing WebRTC stream...");
 
       const audioContext = new (window.AudioContext || window.webkitAudioContext)();
       const source = audioContext.createMediaStreamSource(audioStream);
@@ -66,7 +66,6 @@ export const useVoiceEmotion = (audioStream) => {
           // pad to 2376
           while (flat.length < 2376) flat.push(0);
 
-          // if too long (shouldn't happen), cut
           if (flat.length > 2376) flat = flat.slice(0, 2376);
 
           const res = await fetch(`${process.env.REACT_APP_SERVER_URL || "http://localhost:4000"}/api/emotion/predict`, {
@@ -79,7 +78,7 @@ export const useVoiceEmotion = (audioStream) => {
           const data = await res.json();
 
           if (data.emotion) {
-            // Smooth predictions
+            
             historyRef.current.push(data.emotion);
             if (historyRef.current.length > 5) historyRef.current.shift();
 
@@ -97,14 +96,14 @@ export const useVoiceEmotion = (audioStream) => {
         } catch (err) {
           console.error("Prediction error:", err);
         }
-      }, 4000);
+      }, 3000);
     } catch (err) {
-      console.error("❌ Emotion detection error:", err);
+      console.error("Emotion detection error:", err);
     }
   };
 
   const stopListening = () => {
-    console.log("🛑 Stopping emotion detection...");
+    console.log("Stopping emotion detection...");
     setIsListening(false);
 
     if (meydaRef.current) {

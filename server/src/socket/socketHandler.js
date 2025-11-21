@@ -18,7 +18,7 @@ const socketHandler = (io) => {
 
     socket.on('endCall', ({ to }) => {
       logger.info(`Call ended by ${socket.id} to ${to}`);
-      // Always notify both ends — if `to` is missing, check socket.peerId
+      // notify both ends — if `to` is missing, check socket.peerId
       const targetId = to || socket.peerId;
 
       if (targetId) {
@@ -30,7 +30,7 @@ const socketHandler = (io) => {
       delete socket.peerId;
     });
 
-    // 🆕 handle page reload / refresh
+    // handle page reload / refresh
     socket.on('userReloading', () => {
       if (socket.peerId) {
         const peerId = socket.peerId;

@@ -55,7 +55,7 @@ app.use('/api/auth', authRoutes);
 
 app.use('/api/emotion', emotionRoutes);
 
-// Catch-all 404 handler (no `err` param!)
+// Catch-all 404 handler
 app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });

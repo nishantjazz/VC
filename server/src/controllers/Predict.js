@@ -3,7 +3,6 @@ const ort = require("onnxruntime-node");
 
 exports.predictEmotion = async (req, res) => {
   try {
-    // Ensure model is loaded
     await loadModel();
 
     const session = getSession();
@@ -17,7 +16,7 @@ exports.predictEmotion = async (req, res) => {
       return res.status(400).json({ error: "Missing or invalid features" });
     }
 
-    // 🔥 Frontend now ALWAYS sends exactly 2376 features
+    // Frontend ALWAYS sends exactly 2376 features
     if (features.length !== 2376) {
       console.error("❌ Incorrect feature vector size:", features.length);
       return res.status(400).json({ error: "Incorrect feature length" });
@@ -27,7 +26,7 @@ exports.predictEmotion = async (req, res) => {
     const inputTensor = new ort.Tensor(
       "float32",
       Float32Array.from(features),
-      [1, 2376] // ⭐ Model expects [batch, features]
+      [1, 2376] // Model expects [batch, features]
     );
 
     const results = await session.run({ input: inputTensor });
@@ -51,7 +50,7 @@ exports.predictEmotion = async (req, res) => {
     res.json({ emotion: labels[index] || "unknown" });
 
   } catch (err) {
-    console.error("❌ Prediction error:", err);
+    console.error("Prediction error:", err);
     res.status(500).json({ error: "Prediction failed" });
   }
 };
